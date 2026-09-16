@@ -75,6 +75,8 @@
     ];
   };
 
+  home-manager.users.luyan.imports = [ ../../home-manager/luyan-529-2.nix ];
+
   programs.firefox.enable = true;
 
   systemd.services.pascal-ddns = {

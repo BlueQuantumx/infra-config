@@ -316,6 +316,7 @@
         "529-2" = helper.mkNixos {
           hostName = "529-2";
           system = "x86_64-linux";
+          homeManager = true;
           sops = true;
           modules = [ ./hosts/529-2/configuration.nix ];
         };
