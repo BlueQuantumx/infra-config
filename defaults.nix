@@ -96,7 +96,9 @@
       role = "desktop";
       isRemote = false;
       # TODO(529-2): 填入允许登录 admin 用户与 root 的 SSH 公钥。
-      adminKeys = [ ];
+      adminKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA1Xuo9wlQL1lD9Bd2+XHe8U4MPfrmVucxzIu0VWjA77 luyan@bogon"
+      ];
     };
   };
 
