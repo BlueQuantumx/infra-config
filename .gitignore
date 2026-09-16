@@ -1,0 +1,12 @@
+result
+.direnv/
+**/.env
+
+# OpenTofu / Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+terraform.tfvars.json
+tfplan

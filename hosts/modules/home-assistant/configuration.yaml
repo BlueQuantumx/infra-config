@@ -1,0 +1,51 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Example configuration.yaml entry configuring HomeKit
+homekit:
+- filter:
+    include_domains:
+      - light
+      - binary_sensor
+      - sensor
+    # include_entity_globs:
+    #   - binary_sensor.*_occupancy
+    # include_entities:
+    #   - binary_sensor.living_room_motion
+  name: HASS Bridge
+  port: 21063
+  # entity_config:
+    # alarm_control_panel.home:
+    #   code: 1234
+    # binary_sensor.living_room_motion:
+    #   linked_battery_sensor: sensor.living_room_motion_battery
+    #   low_battery_threshold: 31
+    # fan.air_purifier:
+    #   type: air_purifier
+    #   linked_filter_life_level_sensor: sensor.air_purifier_filter_life_level
+    # light.kitchen_table:
+    #   name: Kitchen Table Light
+    # lock.front_door:
+    #   code: 1234
+    # media_player.living_room:
+    #   feature_list:
+    #     - feature: on_off
+    #     - feature: play_pause
+    #     - feature: play_stop
+    #     - feature: toggle_mute
+    # switch.bedroom_outlet:
+    #   type: outlet
+    # camera.back_porch:
+    #   support_audio: True
+    # sensor.some_co_sensor:
+    #   co_threshold: 1000
+    # sensor.some_co2_sensor:
+    #   co2_threshold: 1000

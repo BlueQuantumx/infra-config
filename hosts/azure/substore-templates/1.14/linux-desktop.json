@@ -1,0 +1,435 @@
+{
+  "$schema": "https://sing-box.sagernet.org/schema.json",
+
+  "services": [
+    {
+      "tag": "sing-box-api",
+      "type": "api",
+      "listen": "127.0.0.1",
+      "listen_port": 60124,
+      "secret": "fuck-clash-yes-singbox",
+      "access_control_allow_private_network": false,
+      "dashboard": {
+        "enabled": true,
+        "download_url": "https://github.com/SagerNet/sing-box-dashboard/archive/refs/heads/gh-pages.zip",
+        "http_client": "select-client"
+      }
+    }
+  ],
+  "log": {
+    "disabled": false,
+    "level": "warn",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:60123",
+      "external_ui": "ui",
+      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
+      "external_ui_download_detour": "select-out",
+      "secret": "fuck-clash-yes-singbox",
+      "default_mode": "rule",
+      "access_control_allow_origin": ["*"],
+      "access_control_allow_private_network": false
+    },
+    "cache_file": {
+      "enabled": true
+    }
+  },
+  "http_clients": [
+    {
+      "tag": "select-client",
+      "detour": "select-out"
+    }
+  ],
+  "endpoints": [
+    {
+      "type": "tailscale",
+      "tag": "ts-ep",
+      "auth_key": "__TAILSCALE_AUTHKEY_LINUX_DESKTOP__",
+      "hostname": "linux-desktop"
+    }
+  ],
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "interface_name": "",
+      "address": ["172.18.0.1/30"],
+      "mtu": 9000,
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "mixed"
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "select-out",
+      "interrupt_exist_connections": true,
+      "outbounds": ["hk-out", "manual-out", "sg-out", "all-out", "jp-out", "us-out"],
+      "default": "all-out"
+    },
+    {
+      "type": "selector",
+      "tag": "fallback-out",
+      "interrupt_exist_connections": true,
+      "outbounds": ["select-out", "direct-out"]
+    },
+    {
+      "type": "selector",
+      "tag": "manual-out",
+      "interrupt_exist_connections": true,
+      "outbounds": []
+    },
+    {
+      "type": "urltest",
+      "tag": "sg-out",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 150,
+      "interrupt_exist_connections": false,
+      "outbounds": []
+    },
+    {
+      "type": "urltest",
+      "tag": "jp-out",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 150,
+      "interrupt_exist_connections": false,
+      "outbounds": []
+    },
+    {
+      "type": "urltest",
+      "tag": "us-out",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 100,
+      "interrupt_exist_connections": false,
+      "outbounds": []
+    },
+    {
+      "type": "urltest",
+      "tag": "all-out",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 100,
+      "interrupt_exist_connections": false,
+      "outbounds": []
+    },
+    {
+      "type": "urltest",
+      "tag": "hk-out",
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 150,
+      "interrupt_exist_connections": false,
+      "outbounds": []
+    },
+    {
+      "type": "direct",
+      "tag": "direct-out"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "action": "sniff",
+        "inbound": "tun-in"
+      },
+      {
+        "action": "hijack-dns",
+        "protocol": "dns"
+      },
+      {
+        "action": "route",
+        "clash_mode": "direct",
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "clash_mode": "global",
+        "outbound": "select-out"
+      },
+      {
+        "action": "route",
+        "ip_cidr": ["100.64.0.0/10"],
+        "outbound": "ts-ep"
+      },
+      {
+        "action": "route",
+        "ip_is_private": true,
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-private"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "port": [22, 587],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "process_name": "aria2c",
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "domain_suffix": "pascal-lab.net",
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-google-gemini", "geosite-ai-chat-not-cn", "geosite-github"],
+        "outbound": "select-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-apple", "geosite-speedtest"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-game-platforms-download", "geosite-games-cn"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-google-cn", "geosite-steam-cn", "geosite-microsoft-cn"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-education-cn"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-geolocation-cn"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-cn"],
+        "outbound": "direct-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-gfw"],
+        "outbound": "select-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-geolocation-not-cn"],
+        "outbound": "select-out"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geoip-cn"],
+        "outbound": "direct-out"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geosite-games-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-games@cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-geolocation-not-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-geolocation-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-game-platforms-download",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-game-platforms-download.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-gfw",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/gfw.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-google-gemini",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/google-gemini.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-steam-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/steam@cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-google-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/google-cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-microsoft-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/microsoft@cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-speedtest",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-speedtest.json",
+        "format": "source"
+      },
+      {
+        "tag": "geosite-ai-chat-not-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ai-chat-!cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-github",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/github.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-apple",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/apple.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-education-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-education-cn.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-private",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
+        "format": "binary"
+      },
+      {
+        "tag": "geosite-cn",
+        "type": "remote",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+        "format": "binary"
+      }
+    ],
+    "auto_detect_interface": true,
+    "find_process": true,
+    "final": "fallback-out",
+    "default_domain_resolver": {
+      "server": "dns-direct"
+    }
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "dns-local",
+        "type": "local"
+      },
+      {
+        "tag": "dns-direct",
+        "type": "https",
+        "server_port": 443,
+        "server": "223.5.5.5",
+        "path": "/dns-query"
+      },
+      {
+        "tag": "dns-remote",
+        "type": "tls",
+        "detour": "select-out",
+        "server_port": 853,
+        "server": "8.8.8.8"
+      }
+    ],
+    "rules": [
+      {
+        "action": "route",
+        "clash_mode": "direct",
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "clash_mode": "global",
+        "server": "dns-remote"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-private"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-apple", "geosite-speedtest"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-games-cn", "geosite-game-platforms-download"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-google-cn", "geosite-microsoft-cn", "geosite-steam-cn"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-education-cn"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-geolocation-cn"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-cn"],
+        "server": "dns-local"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-google-gemini", "geosite-ai-chat-not-cn", "geosite-github"],
+        "server": "dns-remote"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-gfw"],
+        "server": "dns-remote"
+      },
+      {
+        "action": "route",
+        "rule_set": ["geosite-geolocation-not-cn"],
+        "server": "dns-remote"
+      }
+    ],
+    "disable_cache": false,
+    "disable_expire": false,
+    "final": "dns-remote",
+    "strategy": "ipv4_only"
+  }
+}

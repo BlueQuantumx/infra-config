@@ -1,0 +1,31 @@
+schema: spec-driven
+
+# Project context - injected into all artifact instructions.
+# Used by OpenSpec to generate proposals/specs/designs/tasks.
+context: |
+  Project: personal Nix flake for dotfiles and homelab infra.
+  Language: Nix (NixOS + nix-darwin + home-manager), OpenTofu (HCL), YAML.
+  Modules: hosts/modules (host-level, e.g. home-assistant, sing-box, my-et-network, hust-network-login), home-manager/modules (user-level: direnv, ghostty, git, xcode, zsh).
+  Secrets: encrypted with sops-nix (secrets/, .sops.yaml). Note: Never let the secrets appear in context(prompt)!
+  Custom packages in pkgs/ (e.g. hust-network-login), overlays/ for nixpkgs overrides.
+  Conventions:
+    - Use flake outputs (nixosConfigurations/darwinConfigurations/homeConfigurations) rather than external tools.
+    - Per-host config only in hosts/<name>/, shared logic in hosts/modules/ or home-manager/modules/.
+    - Secrets never plaintext; always via sops-nix.
+    - Verify with `nix flake check` / `nixos-rebuild dry-build` (or `darwin-rebuild`) before finishing.
+
+# Per-artifact rules (optional)
+rules:
+  proposal:
+    - State which hosts are affected (macbook / orb / raspi / azure / home-manager).
+    - Call out whether secrets or OpenTofu state are involved.
+    - Keep under 300 words.
+  specs:
+    - List affected files with their existing module paths when possible.
+    - Only specify behavior that is observable in the Nix config.
+    - Only specify general principles or patterns, not specific concrete values. Let the source code itself reveal the concrete value.
+  design:
+    - Prefer existing module patterns (hosts/modules, home-manager/modules) over new ad-hoc files.
+    - Mention rollback plan (git revert / flake.nix input bump).
+  tasks:
+    - Break tasks into small steps; each should be verifiable via `nix flake check` or a dry-build.

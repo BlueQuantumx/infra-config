@@ -1,0 +1,58 @@
+# sops recipient groups.
+#
+# Each secrets file is encrypted only to the hosts that consume it, plus the
+# administration key (`&client`, the MacBook key used for editing and for the
+# flake apps that write secrets). A host that does not consume a file is not a
+# recipient of it.
+keys:
+  - &client ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfRvOqesirqZzMXPF7DLQCE5+jvxITEyvs8a/wcUBVz
+  - &raspi ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAl2PpRbm6XAMtI0bpEMt2NcEy1u2J+bCdr2ILjFpJs
+  - &azure ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHayRnzRhTJMO3jsZlrmoKzMAT6MPZHq6ZIsAHUzBS0K
+  # pascal-cloud-01: 填入接管后生成的 SSH host ed25519 key（经 ssh-to-age 转换），见
+  # hosts/pascal-cloud-01/README.md；填好后运行 `sops updatekeys secrets/pascal-cloud-01.yaml`。
+  # - &pascal-cloud-01 ssh-ed25519 AAAA...
+  # 529-2: 物理桌面；填入该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key。
+  - &529-2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBozXj2QTucf1QDkl9jLKwcJOApiSYVOiW1oruWSpt81
+creation_rules:
+  # github_token: MacBook only.
+  - path_regex: secrets/macbook\.yaml$
+    key_groups:
+    - age:
+      - *client
+  # raspi-consumed secrets (wifi, hust, singbox, tailscale/authkey_raspi).
+  - path_regex: secrets/raspi\.yaml$
+    key_groups:
+    - age:
+      - *client
+      - *raspi
+  # azure-consumed secrets (substore + remote-device tailscale auth keys).
+  - path_regex: secrets/azure\.yaml$
+    key_groups:
+    - age:
+      - *client
+      - *azure
+  # Shared by raspi and azure (my-et-network).
+  - path_regex: secrets/mesh\.yaml$
+    key_groups:
+    - age:
+      - *client
+      - *raspi
+      - *azure
+  # 529-2-scoped file.
+  - path_regex: secrets/529-2\.yaml$
+    key_groups:
+    - age:
+      - *client
+      - *529-2
+  # pascal-cloud-01-scoped file; the host recipient stays commented until the
+  # host is onboarded (see hosts/pascal-cloud-01/README.md).
+  - path_regex: secrets/pascal-cloud-01\.yaml$
+    key_groups:
+    - age:
+      - *client
+      # - *pascal-cloud-01
+  # OpenTofu provider credentials; administration workstation only.
+  - path_regex: secrets/(cloudflare|tailscale)\.env$
+    key_groups:
+    - age:
+      - *client
