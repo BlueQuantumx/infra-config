@@ -8,6 +8,7 @@
   pkgs,
   inputs,
   defaults,
+  config,
   ...
 }:
 {
@@ -75,4 +76,33 @@
   };
 
   programs.firefox.enable = true;
+
+  systemd.services.pascal-ddns = {
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "pascal-ddns.sh" ''
+        set -eu
+        export PATH=/run/current-system/sw/bin:/run/wrappers/bin
+        token=$(tr -d '\n' < ${config.sops.secrets.pascal_ddns_auth.path})
+        [ -n "$token" ]
+        sleep "$(od -An -N2 -tu2 /dev/urandom | awk -v max=291 '{ gsub(/[[:space:]]/, "", $0); print $0 - max * int($0 / max) }')"
+        ip a | curl -fsS -X POST http://pascal08.svr.pascal-lab.net:8788/api/v1/report \
+          -H "Authorization: Bearer $token" \
+          -H 'Content-Type: text/plain; charset=utf-8' \
+          --data-binary @- >/dev/null
+      '';
+    };
+  };
+
+  systemd.timers.pascal-ddns = {
+    wantedBy = [ "timers.target" ];
+
+    timerConfig = {
+      OnBootSec = "0";
+      OnUnitActiveSec = "5min";
+    };
+  };
 }

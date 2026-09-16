@@ -11,8 +11,8 @@ keys:
   # pascal-cloud-01: 填入接管后生成的 SSH host ed25519 key（经 ssh-to-age 转换），见
   # hosts/pascal-cloud-01/README.md；填好后运行 `sops updatekeys secrets/pascal-cloud-01.yaml`。
   # - &pascal-cloud-01 ssh-ed25519 AAAA...
-  # 529-2: 物理桌面；填入该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key。
-  - &529-2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBozXj2QTucf1QDkl9jLKwcJOApiSYVOiW1oruWSpt81
+  # 529_2: 物理桌面；填入该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key。
+  - &529_2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBozXj2QTucf1QDkl9jLKwcJOApiSYVOiW1oruWSpt81
 creation_rules:
   # github_token: MacBook only.
   - path_regex: secrets/macbook\.yaml$
@@ -38,12 +38,12 @@ creation_rules:
       - *client
       - *raspi
       - *azure
-  # 529-2-scoped file.
+  # 529_2-scoped file.
   - path_regex: secrets/529-2\.yaml$
     key_groups:
     - age:
       - *client
-      - *529-2
+      - *529_2
   # pascal-cloud-01-scoped file; the host recipient stays commented until the
   # host is onboarded (see hosts/pascal-cloud-01/README.md).
   - path_regex: secrets/pascal-cloud-01\.yaml$
