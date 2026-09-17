@@ -71,8 +71,6 @@ in
     "subs/hutao_cloud_url" = { };
     "subs/liangxinyun_url" = { };
     "subs/holytech_url" = { };
-    "subs/west_data_url" = { };
-    "subs/west_data_content" = { };
   };
 
   sops.templates = {
@@ -140,7 +138,7 @@ in
         url = config.sops.placeholder."subs/liangxinyun_url";
         process = quickSettings;
         extraOptions = {
-          tag = [ "Main" ];
+          tag = [ "Backup" ];
           passThroughUA = false;
           ignoreFailedRemoteSub = "enabled";
         };
