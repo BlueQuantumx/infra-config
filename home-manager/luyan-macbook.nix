@@ -6,6 +6,11 @@
   defaults,
   ...
 }:
+let
+  # Absolute path to this repository: `nh` builds from a mutable flake path,
+  # so a store copy of the flake would not track edits.
+  repoFlake = "/Users/luyan/Projects/infra-config";
+in
 {
   # You can import other home-manager modules here
   imports = [
@@ -40,6 +45,15 @@
       noto-fonts-cjk-serif
       font-awesome
     ];
+  };
+
+  # nh wraps `darwin-rebuild` / `home-manager switch`, resolving this repo's
+  # flake and target from any working directory.
+  programs.nh = {
+    enable = true;
+    flake = repoFlake;
+    # Automatic GC is already provided by nix.gc.automatic in the host prelude,
+    # so programs.nh.clean stays disabled to avoid a second schedule.
   };
 
   programs.opencode = {
