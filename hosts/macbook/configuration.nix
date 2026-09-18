@@ -23,6 +23,9 @@
   ];
   homebrew.brews = [
     "hermes-agent"
+    # omp — the `can1357/oh-my-pi` coding agent. Fully-qualified name makes
+    # Homebrew Bundle tap `can1357/tap` and trust it on activation.
+    "can1357/tap/omp"
     "opencode"
     "openspec"
     "pi-coding-agent"
