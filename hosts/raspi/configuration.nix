@@ -74,10 +74,14 @@
 
   # My custom options
   my.hass = {
-    activeInstance = "dffc";
+    activeInstance = "nju";
     instances.dffc = {
       configuration = ../modules/home-assistant/configuration.yaml;
       dataDir = "/var/lib/hass";
+    };
+    instances.nju = {
+      configuration = ../modules/home-assistant/configuration.yaml;
+      dataDir = "/var/lib/hass_nju";
     };
   };
 
