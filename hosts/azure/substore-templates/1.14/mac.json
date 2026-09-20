@@ -67,7 +67,14 @@
       "type": "selector",
       "tag": "select-out",
       "interrupt_exist_connections": true,
-      "outbounds": ["hk-out", "manual-out", "sg-out", "all-out", "jp-out", "us-out"],
+      "outbounds": [
+        "hk-out",
+        "manual-out",
+        "sg-out",
+        "all-out",
+        "jp-out",
+        "us-out"
+      ],
       "default": "all-out"
     },
     {
@@ -184,7 +191,11 @@
       },
       {
         "action": "route",
-        "rule_set": ["geosite-google-gemini", "geosite-ai-chat-not-cn", "geosite-github"],
+        "rule_set": [
+          "geosite-google-gemini",
+          "geosite-ai-chat-not-cn",
+          "geosite-github"
+        ],
         "outbound": "select-out"
       },
       {
@@ -199,7 +210,11 @@
       },
       {
         "action": "route",
-        "rule_set": ["geosite-google-cn", "geosite-steam-cn", "geosite-microsoft-cn"],
+        "rule_set": [
+          "geosite-google-cn",
+          "geosite-steam-cn",
+          "geosite-microsoft-cn"
+        ],
         "outbound": "direct-out"
       },
       {
@@ -363,9 +378,19 @@
         "detour": "select-out",
         "server_port": 853,
         "server": "8.8.8.8"
+      },
+      {
+        "tag": "ts-dns",
+        "type": "tailscale",
+        "endpoint": "ts-ep"
       }
     ],
     "rules": [
+      {
+        "action": "route",
+        "preferred_by": "ts-dns",
+        "server": "ts-dns"
+      },
       {
         "action": "route",
         "clash_mode": "direct",
@@ -393,7 +418,11 @@
       },
       {
         "action": "route",
-        "rule_set": ["geosite-google-cn", "geosite-microsoft-cn", "geosite-steam-cn"],
+        "rule_set": [
+          "geosite-google-cn",
+          "geosite-microsoft-cn",
+          "geosite-steam-cn"
+        ],
         "server": "dns-local"
       },
       {
@@ -413,7 +442,11 @@
       },
       {
         "action": "route",
-        "rule_set": ["geosite-google-gemini", "geosite-ai-chat-not-cn", "geosite-github"],
+        "rule_set": [
+          "geosite-google-gemini",
+          "geosite-ai-chat-not-cn",
+          "geosite-github"
+        ],
         "server": "dns-remote"
       },
       {

@@ -135,6 +135,6 @@
   # Tailscale tailnet. `magicDnsDomain` is the tailnet's MagicDNS suffix;
   # nodes are reached as <hostname>.<magicDnsDomain>.
   tailnet = {
-    magicDnsDomain = "tail6338b8.ts.net";
+    magicDnsDomain = "alai-ladon.ts.net";
   };
 }
