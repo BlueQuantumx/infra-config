@@ -76,11 +76,11 @@
   my.hass = {
     activeInstance = "nju";
     instances.dffc = {
-      configuration = ../modules/home-assistant/configuration.yaml;
+      configDir = ./home-assistant;
       dataDir = "/var/lib/hass";
     };
     instances.nju = {
-      configuration = ../modules/home-assistant/configuration.yaml;
+      configDir = ./home-assistant;
       dataDir = "/var/lib/hass_nju";
     };
   };

@@ -1,0 +1,4 @@
+# Automation rules, included by configuration.yaml.
+# This file is mounted read-only into the container: edit it here and rebuild
+# the host, the UI editor cannot write it.
+[]

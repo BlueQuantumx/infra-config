@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   config,
   ...
@@ -11,6 +10,18 @@ let
   containerName = name: "home-assistant-${name}";
   serviceName = name: "podman-${containerName name}.service";
 
+  # An instance's `configDir` is a host directory holding configuration.yaml
+  # plus every file configuration.yaml includes (automations.yaml, ...). Each
+  # entry of that directory is copied to the store and bind-mounted read-only
+  # over /config/<name>, so `!include <name>` resolves while the rest of /config
+  # stays the writable runtime directory (`.storage`, recorder DB, logs) it has
+  # to be.
+  configMounts =
+    dir:
+    lib.mapAttrsToList (
+      name: _: "${builtins.path { inherit name; path = dir + "/${name}"; }}:/config/${name}:ro"
+    ) (lib.filterAttrs (_: type: type == "regular" || type == "directory") (builtins.readDir dir));
+
   mkInstance = name: def: {
     image = "ghcr.io/home-assistant/home-assistant:stable";
     environment = {
@@ -19,9 +30,9 @@ let
     volumes = [
       "/etc/localtime:/etc/localtime:ro"
       "/run/dbus:/run/dbus:ro"
+      # Mounted before the config files, which shadow it file by file.
       "${def.dataDir}:/config:rw"
-      "${pkgs.writeText "configuration.yaml" (builtins.readFile def.configuration)}:/config/configuration.yaml:ro"
-    ];
+    ] ++ configMounts def.configDir;
     extraOptions = [
       "--cap-add=NET_ADMIN"
       "--cap-add=NET_RAW"
@@ -40,9 +51,14 @@ in
       type = lib.types.attrsOf (
         lib.types.submodule {
           options = {
-            configuration = lib.mkOption {
+            configDir = lib.mkOption {
               type = lib.types.path;
-              description = "Path to the configuration.yaml file for this instance.";
+              description = ''
+                Host directory with this instance's declarative configuration:
+                configuration.yaml and every file it includes. All entries are
+                mounted read-only into the container, so UI edits of included
+                files are rejected and must be made here instead.
+              '';
             };
             dataDir = lib.mkOption {
               type = lib.types.path;
