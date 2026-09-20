@@ -97,10 +97,10 @@ in
       IdentityFile = "~/.ssh/raspberrypi";
     };
 
-    settings."raspberrypi-external" = {
-      HostName = "222.20.104.193";
+    settings."raspi-ts" = {
+      HostName = "louis-raspi.${defaults.tailnet.magicDnsDomain}";
       User = "luyan";
-      Port = 52000;
+      Port = 22;
       ForwardAgent = true;
       IdentityFile = "~/.ssh/raspberrypi";
     };
