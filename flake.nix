@@ -173,23 +173,20 @@
           );
         };
 
-      # One check per host so `nix flake check` fails when a host stops
-      # evaluating. Use `--no-build` for a fast evaluation-only pass.
-      hostChecks = {
-        x86_64-linux = {
-          azure = self.nixosConfigurations.azure.config.system.build.toplevel;
-          pascal-cloud-01 = self.nixosConfigurations.pascal-cloud-01.config.system.build.toplevel;
-          digitalocean = self.nixosConfigurations.digitalocean.config.system.build.toplevel;
-          "529-2" = self.nixosConfigurations."529-2".config.system.build.toplevel;
-        };
-        aarch64-linux = {
-          raspi = self.nixosConfigurations.raspi.config.system.build.toplevel;
-          orbstack = self.nixosConfigurations.orbstack.config.system.build.toplevel;
-        };
-        aarch64-darwin = {
-          macbook = self.darwinConfigurations."Louis-MacBook-Pro-2024".system;
-        };
-      };
+      # One check per declared host, so `nix flake check` fails when a host
+      # stops evaluating. Derived from the configuration sets themselves, so a
+      # renamed or dropped host can never leave a stale entry behind. Use
+      # `nix flake check --no-build --all-systems` for a fast, cross-system,
+      # evaluation-only pass.
+      hostChecks =
+        system:
+        let
+          inSystem = nixpkgs.lib.filterAttrs (_: cfg: cfg.pkgs.stdenv.hostPlatform.system == system);
+        in
+        nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) (
+          inSystem self.nixosConfigurations
+        )
+        // nixpkgs.lib.mapAttrs (_: cfg: cfg.system) (inSystem self.darwinConfigurations);
     in
     {
       devShells = forAllSystems (
@@ -350,6 +347,6 @@
         };
       };
 
-      checks = hostChecks;
+      checks = forAllSystems hostChecks;
     };
 }
