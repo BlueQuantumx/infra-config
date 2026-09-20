@@ -50,8 +50,8 @@
       ];
     };
 
-    pascal-cloud-01 = {
-      hostname = "pascal-cloud-01";
+    pascal-cloud = {
+      hostname = "pascal-cloud";
       role = "cloud-server";
       isRemote = false;
       adminKeys = [

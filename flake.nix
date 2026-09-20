@@ -296,12 +296,12 @@
           modules = [ ./hosts/azure/configuration.nix ];
         };
 
-        pascal-cloud-01 = helper.mkNixos {
-          hostName = "pascal-cloud-01";
+        pascal-cloud = helper.mkNixos {
+          hostName = "pascal-cloud";
           system = "x86_64-linux";
           homeManager = true;
           sops = true;
-          modules = [ ./hosts/pascal-cloud-01/configuration.nix ];
+          modules = [ ./hosts/pascal-cloud/configuration.nix ];
         };
 
         orbstack = helper.mkNixos {

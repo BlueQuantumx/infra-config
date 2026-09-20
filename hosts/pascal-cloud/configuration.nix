@@ -4,11 +4,11 @@
 }:
 {
   imports = [
-    ./disko.nix
     ./sops.nix
+    ../modules/pve-portal.nix
     inputs.self.nixosModules.base
     inputs.self.nixosModules.server
-    inputs.self.nixosModules.cloud-vm
+    # inputs.self.nixosModules.cloud-vm
     inputs.self.nixosModules.overlays
     inputs.self.nixosModules.sops
     inputs.self.nixosModules.prelude-linux
