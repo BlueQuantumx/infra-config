@@ -18,7 +18,7 @@ in
     ./modules/base.nix
 
     # macOS-only modules
-    ./modules/aerospace.nix
+    ./modules/rectangle.nix
     ./modules/ghostty.nix
     ./modules/xcode.nix
     ./modules/zsh.nix

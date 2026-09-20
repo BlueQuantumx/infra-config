@@ -1,5 +1,12 @@
 # AeroSpace —— macOS 上 i3 风格的平铺窗口管理器。
 #
+# 当前状态：**未启用**。这个模块不再被 home-manager/luyan-macbook.nix 引入
+# （2026-09-18 起改用 Rectangle），保留下来是为了随时一行 import 就能切回。
+# 未被引入时它不产生任何效果：没有 launchd agent、没有 ~/.aerospace.toml。
+# 要重新启用：在 luyan-macbook.nix 的 macOS-only 列表里加回
+# `./modules/aerospace.nix`，并在「系统设置 → 隐私与安全性 → 辅助功能」里
+# 重新勾选 AeroSpace（store 里的 App 是 adhoc 签名，换了 store 路径就要重新授权）。
+#
 # home-manager 负责生成 ~/.config/aerospace/aerospace.toml，并通过 launchd 托管
 # 进程（programs.aerospace.launchd）。所以 AeroSpace 自身的 start-at-login 与
 # after-login-command 由模块强制覆盖为 false/[]，不要在 settings 里设置它们。

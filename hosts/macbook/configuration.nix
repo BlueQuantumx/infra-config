@@ -46,6 +46,7 @@
     "obsidian"
     "orbstack"
     "pearcleaner"
+    "rectangle"
     "sfm"
     "stats"
     "visual-studio-code"
