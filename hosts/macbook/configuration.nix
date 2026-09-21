@@ -7,6 +7,7 @@
   imports = [
     inputs.self.nixosModules.prelude
     inputs.self.darwinModules.homebrew
+    inputs.self.darwinModules.bitwarden
   ];
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -22,6 +23,7 @@
     pdfpc
   ];
   homebrew.brews = [
+    "mas"
     "hermes-agent"
     # omp — the `can1357/oh-my-pi` coding agent. Fully-qualified name makes
     # Homebrew Bundle tap `can1357/tap` and trust it on activation.
@@ -85,4 +87,8 @@
 
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = "aarch64-darwin";
+
+  my.bitwarden = {
+    enable = true;
+  };
 }

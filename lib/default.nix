@@ -91,6 +91,9 @@ rec {
     home-assistant = ../hosts/modules/home-assistant.nix;
     wifi = ../hosts/modules/wifi.nix;
     hust-network-login = ../hosts/modules/hust-network-login.nix;
+    # Bitwarden Desktop is packaged for Linux as well, hence one module per
+    # platform (see hosts/modules/bitwarden/).
+    bitwarden = ../hosts/modules/bitwarden/linux.nix;
   };
 
   homeManagerModules = {
@@ -105,5 +108,6 @@ rec {
 
   darwinModules = {
     homebrew = ../hosts/modules/homebrew.nix;
+    bitwarden = ../hosts/modules/bitwarden/macos.nix;
   };
 }
