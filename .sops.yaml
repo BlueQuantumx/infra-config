@@ -10,7 +10,7 @@ keys:
   - &azure ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHayRnzRhTJMO3jsZlrmoKzMAT6MPZHq6ZIsAHUzBS0K
   # pascal-cloud-01: 填入接管后生成的 SSH host ed25519 key（经 ssh-to-age 转换），见
   # hosts/pascal-cloud-01/README.md；填好后运行 `sops updatekeys secrets/pascal-cloud-01.yaml`。
-  # - &pascal-cloud-01 ssh-ed25519 AAAA...
+  - &pascal-cloud ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1w30Ah/5xWY2vAEFAfhmGfGF+yQuZTnBRAwvUdCh7e
   # 529_2: 物理桌面；填入该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key。
   - &529_2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBozXj2QTucf1QDkl9jLKwcJOApiSYVOiW1oruWSpt81
 creation_rules:
@@ -46,11 +46,11 @@ creation_rules:
       - *529_2
   # pascal-cloud-01-scoped file; the host recipient stays commented until the
   # host is onboarded (see hosts/pascal-cloud-01/README.md).
-  - path_regex: secrets/pascal-cloud-01\.yaml$
+  - path_regex: secrets/pascal-cloud\.yaml$
     key_groups:
     - age:
       - *client
-      # - *pascal-cloud-01
+      - *pascal-cloud
   # OpenTofu provider credentials; administration workstation only.
   - path_regex: secrets/(cloudflare|tailscale)\.env$
     key_groups:

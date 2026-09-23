@@ -15,5 +15,5 @@
   ];
 
   # Integrate home-manager as a NixOS module
-  home-manager.users.luyan.imports = [ ../../home-manager/luyan-pascal-cloud-01.nix ];
+  home-manager.users.luyan.imports = [ ../../home-manager/luyan-pascal-cloud.nix ];
 }

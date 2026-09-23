@@ -1,3 +1,3 @@
 {
-  sops.defaultSopsFile = ../../secrets/pascal-cloud-01.yaml;
+  sops.defaultSopsFile = ../../secrets/pascal-cloud.yaml;
 }
