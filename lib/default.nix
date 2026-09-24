@@ -33,18 +33,19 @@ rec {
       // lib.optionalAttrs (system != null) { inherit system; }
       // {
         specialArgs = baseSpecialArgs // { inherit hostName; } // extraSpecialArgs;
-        modules =
-          [ inputs.disko.nixosModules.disko ]
-          ++ lib.optional homeManager inputs.home-manager.nixosModules.home-manager
-          ++ lib.optional sops inputs.sops-nix.nixosModules.sops
-          ++ lib.optional homeManager {
-            # The integrated home-manager reuses the system nixpkgs (overlays are
-            # applied once, in modules/overlays.nix), and receives the shared args.
-            home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.extraSpecialArgs = baseSpecialArgs;
-          }
-          ++ modules;
+        modules = [
+          inputs.disko.nixosModules.disko
+        ]
+        ++ lib.optional homeManager inputs.home-manager.nixosModules.home-manager
+        ++ lib.optional sops inputs.sops-nix.nixosModules.sops
+        ++ lib.optional homeManager {
+          # The integrated home-manager reuses the system nixpkgs (overlays are
+          # applied once, in modules/overlays.nix), and receives the shared args.
+          home-manager.useUserPackages = true;
+          home-manager.useGlobalPkgs = true;
+          home-manager.extraSpecialArgs = baseSpecialArgs;
+        }
+        ++ modules;
       }
     );
 
@@ -91,6 +92,7 @@ rec {
     home-assistant = ../hosts/modules/home-assistant.nix;
     wifi = ../hosts/modules/wifi.nix;
     hust-network-login = ../hosts/modules/hust-network-login.nix;
+    pascal-ddns = ../hosts/modules/pascal-ddns.nix;
     # Bitwarden Desktop is packaged for Linux as well, hence one module per
     # platform (see hosts/modules/bitwarden/).
     bitwarden = ../hosts/modules/bitwarden/linux.nix;

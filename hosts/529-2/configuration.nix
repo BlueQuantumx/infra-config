@@ -18,6 +18,7 @@
     inputs.self.nixosModules.base
     inputs.self.nixosModules.server
     inputs.self.nixosModules.overlays
+    inputs.self.nixosModules.pascal-ddns
   ];
 
   # UEFI systemd-boot on the installer-created ESP.
@@ -79,31 +80,12 @@
 
   programs.firefox.enable = true;
 
-  systemd.services.pascal-ddns = {
-    wants = [ "network-online.target" ];
-    after = [ "network-online.target" ];
-
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = pkgs.writeShellScript "pascal-ddns.sh" ''
-        set -eu
-        export PATH=/run/current-system/sw/bin:/run/wrappers/bin
-        token=$(tr -d '\n' < ${config.sops.secrets.pascal_ddns_auth.path})
-        [ -n "$token" ]
-        ip a | curl -fsS -X POST http://pascal08.svr.pascal-lab.net:8788/api/v1/report \
-          -H "Authorization: Bearer $token" \
-          -H 'Content-Type: text/plain; charset=utf-8' \
-          --data-binary @- >/dev/null
-      '';
-    };
-  };
-
-  systemd.timers.pascal-ddns = {
-    wantedBy = [ "timers.target" ];
-
-    timerConfig = {
-      OnBootSec = "0";
-      OnUnitActiveSec = "5min";
-    };
+  # Report this desktop's addresses to Pascal DDNS. It sits on the campus
+  # network, so it talks to the DDNS backend directly instead of via the public
+  # HTTPS frontend.
+  services.pascal-ddns = {
+    enable = true;
+    server = "http://pascal08.svr.pascal-lab.net:8788";
+    secretFile = config.sops.secrets.pascal_ddns_auth.path;
   };
 }

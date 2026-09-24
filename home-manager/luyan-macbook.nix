@@ -141,7 +141,7 @@ in
       ForwardAgent = true;
     };
 
-    settings."pascal-cloud-01" = {
+    settings."pascal-cloud" = {
       HostName = "114.212.81.76";
       User = "root";
       IdentityFile = "~/.ssh/pascal";
