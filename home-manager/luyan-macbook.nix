@@ -127,6 +127,7 @@ in
     settings."huawei-cloud" = {
       HostName = "1.92.75.149";
       User = "luyan";
+      IdentityFile = "zhf";
     };
 
     settings."tencent-cloud" = {
