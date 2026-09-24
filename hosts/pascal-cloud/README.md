@@ -54,7 +54,7 @@ nixos-anywhere --build-on remote --flake .#pascal-cloud root@<ip>
   ssh root@<ip> 'cat /etc/ssh/ssh_host_ed25519_key.pub' | ssh-to-age
   ```
 
-  取消 `.sops.yaml` 中 `&pascal-cloud` 相关注释并填入转换结果，然后重加密该主机专属的 secrets 文件（接收者随该主机的 age key 一起加入）：
+  把转换结果填入 `.sops.yaml` 中 `&pascal-cloud`（已填；主机换 host key 后需重做），然后重加密该主机专属的 secrets 文件（接收者随该主机的 age key 一起加入）：
 
   ```bash
   sops updatekeys secrets/pascal-cloud.yaml
@@ -65,9 +65,9 @@ nixos-anywhere --build-on remote --flake .#pascal-cloud root@<ip>
 
 ## DDNS 上报
 
-本机通过 `services.pascal-ddns`（`hosts/modules/pascal-ddns.nix`）每 5 分钟上报一次自身地址，把 `pascal-cloud.svr.pascal-lab.net` 指向本机。流程：
+本机通过 `services.pascal-ddns`（`hosts/modules/pascal-ddns.nix`）每 5 分钟上报一次自身地址，把 `zly.svr.pascal-lab.net` 指向本机（本机复用现有条目 `zly`，不单独建条目）。流程：
 
-1. 在 <https://ddns.pascal-lab.net> 用统一账号登录，创建（或复用）名为 `pascal-cloud` 的条目，复制它给出的 `report_uuid`。
+1. 在 <https://ddns.pascal-lab.net> 用统一账号登录，创建（或复用）条目，复制它给出的 `report_uuid`。
 2. 把该 `report_uuid` 写入本主机专属的 secrets 文件：
 
    ```bash
@@ -88,3 +88,4 @@ nixos-anywhere --build-on remote --flake .#pascal-cloud root@<ip>
 | 接管后 SSH 被拒 | 确认使用 authorized keys 中对应的私钥；清理本地 known_hosts |
 | sops secret 不可见 | 确认 `.sops.yaml` 已含该主机 age key，且已对该主机专属 secrets 文件执行 `sops updatekeys` |
 | `pascal_ddns_auth` 报 key 不存在 | 见「DDNS 上报」，需先把条目 `report_uuid` 写入 `secrets/pascal-cloud.yaml` |
+| 构建卡在 `proxy.golang.org`（`sops-install-secrets` 的 go-modules 拉取超时） | 本机访问不到 `proxy.golang.org`，`hosts/modules/sops-common.nix` 已把 `sops.package` 的 Go 模块拉取指向 `goproxy.cn`；确认该主机仍 import `nixosModules.sops` |

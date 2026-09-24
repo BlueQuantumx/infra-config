@@ -25,8 +25,9 @@
     config.allowUnfree = true;
   };
 
-  # Publish this cloud VM's address as pascal-cloud.svr.pascal-lab.net, reached
-  # through the service's public HTTPS frontend.
+  # Publish this cloud VM's address as zly.svr.pascal-lab.net -- the Pascal DDNS
+  # entry this host reuses -- reached through the service's public HTTPS
+  # frontend.
   services.pascal-ddns = {
     enable = true;
     secretFile = config.sops.secrets.pascal_ddns_auth.path;

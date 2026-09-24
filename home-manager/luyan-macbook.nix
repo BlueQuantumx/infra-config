@@ -142,8 +142,8 @@ in
     };
 
     settings."pascal-cloud" = {
-      HostName = "114.212.81.76";
-      User = "root";
+      HostName = "zly.svr.pascal-lab.net";
+      User = "luyan";
       IdentityFile = "~/.ssh/pascal";
       ForwardAgent = true;
     };

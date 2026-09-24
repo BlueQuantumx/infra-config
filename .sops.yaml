@@ -8,8 +8,8 @@ keys:
   - &client ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGfRvOqesirqZzMXPF7DLQCE5+jvxITEyvs8a/wcUBVz
   - &raspi ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDAl2PpRbm6XAMtI0bpEMt2NcEy1u2J+bCdr2ILjFpJs
   - &azure ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHayRnzRhTJMO3jsZlrmoKzMAT6MPZHq6ZIsAHUzBS0K
-  # pascal-cloud-01: 填入接管后生成的 SSH host ed25519 key（经 ssh-to-age 转换），见
-  # hosts/pascal-cloud-01/README.md；填好后运行 `sops updatekeys secrets/pascal-cloud-01.yaml`。
+  # pascal-cloud: 该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key；
+  # 主机重建或换 host key 后需重新转换并 `sops updatekeys secrets/pascal-cloud.yaml`。
   - &pascal-cloud ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1w30Ah/5xWY2vAEFAfhmGfGF+yQuZTnBRAwvUdCh7e
   # 529_2: 物理桌面；填入该主机 SSH host ed25519 key 经 `ssh-to-age` 转换后的 age key。
   - &529_2 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBozXj2QTucf1QDkl9jLKwcJOApiSYVOiW1oruWSpt81
@@ -44,8 +44,7 @@ creation_rules:
     - age:
       - *client
       - *529_2
-  # pascal-cloud-01-scoped file; the host recipient stays commented until the
-  # host is onboarded (see hosts/pascal-cloud-01/README.md).
+  # pascal-cloud-scoped file (DDNS report uuid).
   - path_regex: secrets/pascal-cloud\.yaml$
     key_groups:
     - age:
