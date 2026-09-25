@@ -7,7 +7,7 @@
       "type": "api",
       "listen": "127.0.0.1",
       "listen_port": 60124,
-      "secret": "fuck-clash-yes-singbox",
+      "secret": "__SUBSTORE_API_SECRET__",
       "access_control_allow_private_network": false,
       "dashboard": {
         "enabled": true,
@@ -27,7 +27,7 @@
       "external_ui": "ui",
       "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
       "external_ui_download_detour": "select-out",
-      "secret": "fuck-clash-yes-singbox",
+      "secret": "__SUBSTORE_API_SECRET__",
       "default_mode": "rule",
       "access_control_allow_origin": ["*"],
       "access_control_allow_private_network": false

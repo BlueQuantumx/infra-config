@@ -19,19 +19,21 @@ let
       source = "local";
       sourceType = "collection";
       type = "file";
-      # Remote-device templates carry an auth-key token that is replaced here
-      # with a sops placeholder. sops-install-secrets substitutes the real key
-      # when the files.json template is rendered; the key never lands in git.
+      # Templates carry auth-key and API-secret tokens that are replaced here
+      # with sops placeholders. sops-install-secrets substitutes the real values
+      # when the files.json template is rendered; they never land in git.
       content = lib.replaceStrings
         [
           "__TAILSCALE_AUTHKEY_MAC__"
           "__TAILSCALE_AUTHKEY_IOS__"
           "__TAILSCALE_AUTHKEY_LINUX_DESKTOP__"
+          "__SUBSTORE_API_SECRET__"
         ]
         [
           config.sops.placeholder."tailscale/authkey_mac"
           config.sops.placeholder."tailscale/authkey_ios"
           config.sops.placeholder."tailscale/authkey_linux_desktop"
+          config.sops.placeholder."subs/api_secret"
         ]
         (builtins.readFile (templates + "/${version}/${name}.json"));
       process = scriptOperator (builtins.readFile "${templates}/scripts/inject-proxies.js");
@@ -68,6 +70,7 @@ in
   sops.secrets = {
     backend_path = { };
     push_service_base_url = { };
+    "subs/api_secret" = { };
     "subs/hutao_cloud_url" = { };
     "subs/liangxinyun_url" = { };
     "subs/holytech_url" = { };
