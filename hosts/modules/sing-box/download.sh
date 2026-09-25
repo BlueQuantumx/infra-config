@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
-
+#
+# Downloads the sing-box configuration from the subscription URL stored in a
+# sops secret. Every path comes from the environment, so the script is
+# host-agnostic; hosts/modules/sing-box.nix supplies:
+#
+#   SINGBOX_SECRET_FILE  file holding the subscription URL
+#   SINGBOX_CONFIG_FILE  where the validated configuration is written
+#
+# A failed download or an invalid configuration leaves an empty `{}` config
+# behind (sing-box then starts with its defaults) instead of failing the unit.
 set -euo pipefail
 
-SECRET_FILE="/run/secrets/singbox/subscription_url"
+SECRET_FILE="${SINGBOX_SECRET_FILE:?SINGBOX_SECRET_FILE is required}"
+OUTPUT="${SINGBOX_CONFIG_FILE:?SINGBOX_CONFIG_FILE is required}"
 
-CONFIG_DIR="/var/lib/sing-box"
-OUTPUT="$CONFIG_DIR/config.json"
-
-mkdir -p "$CONFIG_DIR"
+mkdir -p "$(dirname "$OUTPUT")"
 
 URL="$(cat "$SECRET_FILE")"
 
 TMP="$(mktemp)"
+trap 'rm -f "$TMP"' EXIT
 
 echo "Downloading subscription..."
 

@@ -14,6 +14,7 @@
     inputs.self.nixosModules.sops
     inputs.self.nixosModules.prelude-linux
     inputs.self.nixosModules.pascal-ddns
+    inputs.self.nixosModules.sing-box
   ];
 
   nixpkgs = {
@@ -31,6 +32,12 @@
   services.pascal-ddns = {
     enable = true;
     secretFile = config.sops.secrets.pascal_ddns_auth.path;
+  };
+
+  # sing-box client, configured from the same subscription the other hosts use.
+  my.singbox = {
+    enable = true;
+    secretFile = config.sops.secrets."singbox/subscription_url".path;
   };
 
   # Integrate home-manager as a NixOS module

@@ -50,6 +50,15 @@
     sopsFile = ../../secrets/mesh.yaml;
   };
 
+  # sing-box client, configured from a subscription URL kept in this host's sops
+  # file.
+  my.singbox = {
+    enable = true;
+    secretFile = config.sops.secrets."singbox/subscription_url".path;
+  };
+
+  sops.secrets."singbox/subscription_url" = { };
+
   # Tailscale enrollment key, minted by the tailnet OpenTofu stack and synced
   # into sops.
   sops.secrets."tailscale/authkey_raspi" = {

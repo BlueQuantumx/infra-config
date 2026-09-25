@@ -1,3 +1,6 @@
 {
-    "git.autofetch": true
+    "git.autofetch": true,
+    "yaml.disableSchemaDetection": [
+        "file:///Users/luyan/Projects/infra-config/secrets/azure.yaml"
+    ]
 }
