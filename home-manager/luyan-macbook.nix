@@ -19,6 +19,7 @@ in
 
     # macOS-only modules
     ./modules/rectangle.nix
+    ./modules/karabiner.nix
     ./modules/ghostty.nix
     ./modules/xcode.nix
     ./modules/zsh.nix
