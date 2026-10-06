@@ -3,6 +3,13 @@
 Personal Nix flake for dotfiles and homelab infra: NixOS / nix-darwin /
 home-manager hosts, OpenTofu infrastructure, sops-nix secrets.
 
+## Home Assistant
+
+`hosts/modules/home-assistant.nix` mounts Xiaomi Home's `custom_components/xiaomi_home`
+read-only into every declared Home Assistant instance. The source is pinned to
+release `v0.5.0` in `flake.nix` and `flake.lock`; update the release URL and run
+`nix flake lock --update-input ha-xiaomi-home` to upgrade it.
+
 ## Handling secrets
 
 Values encrypted under `secrets/` must never reach a terminal, a log, a commit

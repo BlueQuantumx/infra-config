@@ -30,6 +30,11 @@
 
     # nix-homebrew, for declarative Homebrew on macOS
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    # Home Assistant's Xiaomi Home custom integration, kept at a release tag.
+    ha-xiaomi-home = {
+      url = "github:XiaoMi/ha_xiaomi_home/v0.5.0";
+      flake = false;
+    };
   };
 
   outputs =
@@ -183,9 +188,7 @@
         let
           inSystem = nixpkgs.lib.filterAttrs (_: cfg: cfg.pkgs.stdenv.hostPlatform.system == system);
         in
-        nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) (
-          inSystem self.nixosConfigurations
-        )
+        nixpkgs.lib.mapAttrs (_: cfg: cfg.config.system.build.toplevel) (inSystem self.nixosConfigurations)
         // nixpkgs.lib.mapAttrs (_: cfg: cfg.system) (inSystem self.darwinConfigurations);
     in
     {

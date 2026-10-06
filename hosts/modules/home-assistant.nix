@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  inputs,
   ...
 }:
 
@@ -32,7 +33,10 @@ let
       "/run/dbus:/run/dbus:ro"
       # Mounted before the config files, which shadow it file by file.
       "${def.dataDir}:/config:rw"
-    ] ++ configMounts def.configDir;
+    ] ++ configMounts def.configDir ++ [
+      # Mounted last so configDir cannot shadow the declarative integration.
+      "${inputs.ha-xiaomi-home}/custom_components/xiaomi_home:/config/custom_components/xiaomi_home:ro"
+    ];
     extraOptions = [
       "--cap-add=NET_ADMIN"
       "--cap-add=NET_RAW"
