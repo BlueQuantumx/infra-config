@@ -204,6 +204,7 @@
           default = pkgs.mkShellNoCC {
             name = "nix-config-dev";
             nativeBuildInputs = with pkgs; [
+              nil
               nixd # lsp language server for nix
               nixpkgs-fmt
               nixfmt

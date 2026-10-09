@@ -26,11 +26,11 @@ in
   homebrew = {
     enable = true;
     onActivation = {
-      autoUpdate = true; # 在 darwin-rebuild switch 时自动执行 brew update
+      autoUpdate = false; # mas 与 onActivation.autoUpdate 冲突，暂时关闭
       upgrade = true; # 在 darwin-rebuild switch 时自动执行 brew upgrade
       # "zap" 会自动卸载掉所有“未在下面 Nix 代码中声明”的 Brew 软件、Cask 和 Tap
       # 如果担心以前手动装的软件被删，可以先改成 "uninstall" 或 "none"
-      cleanup = "none";
+      cleanup = "uninstall";
     };
   };
 }
