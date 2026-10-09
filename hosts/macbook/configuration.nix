@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    inputs.self.darwinModules.base
     inputs.self.nixosModules.prelude
     inputs.self.darwinModules.homebrew
     inputs.self.darwinModules.bitwarden

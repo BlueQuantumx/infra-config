@@ -109,6 +109,7 @@ rec {
   };
 
   darwinModules = {
+    base = ../hosts/modules/darwin-base.nix;
     homebrew = ../hosts/modules/homebrew.nix;
     bitwarden = ../hosts/modules/bitwarden/macos.nix;
   };

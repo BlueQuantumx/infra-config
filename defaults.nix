@@ -36,7 +36,8 @@
   };
 
   # Per-host registry, keyed by flake attribute name.
-  #   hostname    - networking.hostName; null leaves it unset
+  #   hostname    - NixOS networking.hostName; on Darwin, localHostName and
+  #                 computerName. null leaves them unset
   #   role        - free-form classification
   #   isRemote    - drives the VSCode remote (nix-ld) workaround
   #   adminKeys   - public keys allowed to log in as the admin user and root
@@ -85,7 +86,7 @@
     };
 
     macbook = {
-      hostname = null;
+      hostname = "Louis-MacBook";
       role = "workstation";
       isRemote = false;
       adminKeys = [ ];
