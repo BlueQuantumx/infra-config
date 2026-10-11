@@ -16,11 +16,16 @@ The template set SHALL provide a sing-box client profile for every supported dev
 
 ### Requirement: Distinct tailnet identity per remote device profile
 
-Each remote-device profile SHALL declare its own Tailscale endpoint identity, using a distinct auth-key placeholder and hostname, and SHALL NOT reuse another profile's identity.
+Each remote-device profile SHALL declare its own Tailscale endpoint identity, using a distinct hostname, and SHALL NOT reuse another profile's identity. The endpoint SHALL NOT carry an auth key; each device enrolls through the interactive login URL its own sing-box reports.
 
 #### Scenario: Devices authenticate as separate nodes
 - **WHEN** two remote-device profiles are materialized and run at the same time
 - **THEN** each authenticates to the tailnet as its own node rather than sharing one identity
+
+#### Scenario: Profiles ship without enrollment credentials
+- **WHEN** a remote-device profile is rendered into a sub-store payload
+- **THEN** its Tailscale endpoint declares no `auth_key`
+- **AND** the rendered payload contains no key material that could join the tailnet
 
 ### Requirement: Platform-appropriate routing behavior
 

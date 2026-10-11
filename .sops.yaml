@@ -25,7 +25,7 @@ creation_rules:
     - age:
       - *client
       - *raspi
-  # azure-consumed secrets (substore + remote-device tailscale auth keys).
+  # azure-consumed secrets (substore + azure's own tailscale auth key).
   - path_regex: secrets/azure\.yaml$
     key_groups:
     - age:

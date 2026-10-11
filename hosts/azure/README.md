@@ -148,7 +148,7 @@ tofu destroy
 | `virtualisation.hypervGuest.enable` | Azure 是 Hyper-V 客户机,加载 hv_* 驱动与 hyperv-daemons |
 | `boot.loader.grub.efiInstallAsRemovable` | Azure Gen2 UEFI 走可移除引导路径 |
 | `disko` 磁盘 `/dev/sda` | Azure OS 磁盘为 SCSI(无临时盘,Basv2 无 ephemeral) |
-| `services.tailscale` | Azure 作为 tailnet 的 server + exit 节点(`--advertise-exit-node`，退出节点由 tailnet ACL 自动批准)。密钥由 `tofu/tailnet` 栈生成，经 `tofu-tailnet-secrets` 同步进 sops；NSG 不开放任何 tailnet 入站端口，连接均为出站发起。 |
+| `services.tailscale` | Azure 作为 tailnet 的 server + exit 节点(`--advertise-exit-node`，退出节点由 tailnet ACL 自动批准)。本机密钥由 `tofu/tailnet` 栈生成，经 `tofu-tailnet-secrets` 同步进 sops；NSG 不开放任何 tailnet 入站端口，连接均为出站发起。Mac/iOS/Linux 桌面客户端的 sing-box tailscale endpoint **不含 auth key**(订阅 URL 可被任意持有者取回)，改由各设备首次运行时通过 sing-box 报出的登录 URL 交互登录，节点状态存于 endpoint 的 `state_directory`(默认 `tailscale`,位于 profile 目录内)。 |
 | EasyTier(可选回退) | EasyTier 配置全部保留，但默认关闭(`defaults.nix` 的 `easytier.enable`)。开启时同时启用服务/密钥/NSG 规则；关闭时不声明 sops 密钥、不建 NSG 规则。 |
 | `Standard_B2ats_v2` | 2 vCPU / 1 GiB,AMD x86-64;学生套餐免费规格(750 小时/月),x86 免费档中的最大内存版本(B1s 仅 1 vCPU / 1 GiB) |
 | 固定公网 IP | 每次重建后 IP 保持不变(同一订阅/区域) |

@@ -38,22 +38,13 @@
     sopsFile = ../../secrets/mesh.yaml;
   };
 
-  # Tailscale enrollment keys, minted by the tailnet OpenTofu stack and
-  # synced into sops. azure also carries the client keys, injected into the
-  # sub-store templates for the Mac, iOS, and Linux desktop sing-box endpoints.
-  sops.secrets = {
-    "tailscale/authkey_azure" = {
-      sopsFile = ../../secrets/azure.yaml;
-    };
-    "tailscale/authkey_mac" = {
-      sopsFile = ../../secrets/azure.yaml;
-    };
-    "tailscale/authkey_ios" = {
-      sopsFile = ../../secrets/azure.yaml;
-    };
-    "tailscale/authkey_linux_desktop" = {
-      sopsFile = ../../secrets/azure.yaml;
-    };
+  # Tailscale enrollment key for this node, minted by the tailnet OpenTofu
+  # stack and synced into sops. The Mac, iOS and Linux desktop sing-box
+  # endpoints carry no key: each device enrolls through the interactive login
+  # URL its own sing-box reports, so no credential travels in a downloadable
+  # profile and no client key lives in this file.
+  sops.secrets."tailscale/authkey_azure" = {
+    sopsFile = ../../secrets/azure.yaml;
   };
 
   # Tailscale: exit + server node. The sops-supplied auth key is tagged

@@ -19,23 +19,15 @@ let
       source = "local";
       sourceType = "collection";
       type = "file";
-      # Templates carry auth-key and API-secret tokens that are replaced here
-      # with sops placeholders. sops-install-secrets substitutes the real values
-      # when the files.json template is rendered; they never land in git.
-      content = lib.replaceStrings
-        [
-          "__TAILSCALE_AUTHKEY_MAC__"
-          "__TAILSCALE_AUTHKEY_IOS__"
-          "__TAILSCALE_AUTHKEY_LINUX_DESKTOP__"
-          "__SUBSTORE_API_SECRET__"
-        ]
-        [
-          config.sops.placeholder."tailscale/authkey_mac"
-          config.sops.placeholder."tailscale/authkey_ios"
-          config.sops.placeholder."tailscale/authkey_linux_desktop"
-          config.sops.placeholder."subs/api_secret"
-        ]
-        (builtins.readFile (templates + "/${version}/${name}.json"));
+      # Templates carry the sub-store API-secret token, replaced here with a
+      # sops placeholder: sops-install-secrets substitutes the real value when
+      # the files.json template is rendered, so it never lands in git.
+      # Tailscale endpoints are keyless by design — a downloadable profile must
+      # not carry an enrollment credential, so each client joins through the
+      # login URL its own sing-box reports.
+      content = lib.replaceString "__SUBSTORE_API_SECRET__" config.sops.placeholder."subs/api_secret" (
+        builtins.readFile (templates + "/${version}/${name}.json")
+      );
       process = scriptOperator (builtins.readFile "${templates}/scripts/inject-proxies.js");
     } (lib.optionalAttrs (mode != null) { inherit mode; });
   scriptOperator = scriptContent: [

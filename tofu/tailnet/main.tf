@@ -39,8 +39,11 @@ resource "tailscale_dns_preferences" "this" {
   magic_dns = true
 }
 
-# One pre-authorized, reusable key per node. Tags ride on the key, so nodes are
-# classified (and exit nodes auto-approved) at enrollment with no later lookup.
+# One pre-authorized, reusable key per server node. Tags ride on the key, so
+# nodes are classified (and exit nodes auto-approved) at enrollment with no
+# later lookup. Client devices (Mac, iOS, Linux desktop) deliberately get no
+# key: their sing-box tailscale endpoint enrolls through the interactive login
+# URL, so a leaked subscription can never mint tailnet members.
 resource "tailscale_tailnet_key" "azure" {
   reusable            = true
   ephemeral           = false
@@ -59,34 +62,4 @@ resource "tailscale_tailnet_key" "raspi" {
   recreate_if_invalid = "always"
   description         = "raspiserverexit"
   tags                = [local.tag_server, local.tag_exit]
-}
-
-resource "tailscale_tailnet_key" "mac" {
-  reusable            = true
-  ephemeral           = false
-  preauthorized       = true
-  expiry              = var.auth_key_expiry_seconds
-  recreate_if_invalid = "always"
-  description         = "macclient"
-  tags                = [local.tag_client]
-}
-
-resource "tailscale_tailnet_key" "ios" {
-  reusable            = true
-  ephemeral           = false
-  preauthorized       = true
-  expiry              = var.auth_key_expiry_seconds
-  recreate_if_invalid = "always"
-  description         = "iosclient"
-  tags                = [local.tag_client]
-}
-
-resource "tailscale_tailnet_key" "linux_desktop" {
-  reusable            = true
-  ephemeral           = false
-  preauthorized       = true
-  expiry              = var.auth_key_expiry_seconds
-  recreate_if_invalid = "always"
-  description         = "linuxdesktopclient"
-  tags                = [local.tag_client]
 }

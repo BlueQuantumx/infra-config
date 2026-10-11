@@ -37,13 +37,19 @@ The NixOS hosts `azure` and `raspi` SHALL enable the Tailscale service and enrol
 
 ### Requirement: The Mac joins through sing-box's userspace tailscale endpoint
 
-The Mac sing-box template SHALL declare a `tailscale` endpoint in place of the EasyTier WireGuard endpoint, and SHALL NOT request a system interface, so the endpoint participates in sing-box's own routing instead of creating a second TUN device. The endpoint's auth key SHALL be injected at render time from sops, never stored in the template file.
+The Mac sing-box template SHALL declare a `tailscale` endpoint in place of the EasyTier WireGuard endpoint, and SHALL NOT request a system interface, so the endpoint participates in sing-box's own routing instead of creating a second TUN device. The endpoint SHALL carry no auth key: the rendered profile is retrievable by anyone holding the subscription URL, so enrollment happens through the interactive login URL sing-box reports rather than through a credential shipped in the payload.
 
-#### Scenario: Auth key is injected at render time
+#### Scenario: Profile carries no credential
 
 - **WHEN** the sub-store payload for the Mac template is rendered
-- **THEN** the endpoint's auth key is substituted from a sops placeholder
-- **AND** the committed template contains no key material
+- **THEN** the tailscale endpoint declares no `auth_key`
+- **AND** neither the committed template nor the rendered payload contains key material
+
+#### Scenario: The device enrolls by logging in
+
+- **WHEN** the Mac's tailscale endpoint starts without stored node state
+- **THEN** sing-box reports the Tailscale login URL and waits for authentication
+- **AND** a later start reuses the persisted state instead of requiring a new login
 
 #### Scenario: Endpoint stays in userspace
 

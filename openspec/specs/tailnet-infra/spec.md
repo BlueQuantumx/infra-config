@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Defines the OpenTofu-managed tailnet control plane: an isolated stack that owns the tailnet ACL, tags and exit-node approval, mints per-node tagged auth keys, manages the tailnet DNS preference, and bridges those keys into sops so hosts can consume them.
+Defines the OpenTofu-managed tailnet control plane: an isolated stack that owns the tailnet ACL, tags and exit-node approval, mints tagged auth keys for the server nodes, manages the tailnet DNS preference, and bridges those keys into sops so hosts can consume them.
 
 ## Requirements
 
@@ -26,16 +26,22 @@ Credentials for the tailnet provider SHALL be supplied through environment varia
 - **THEN** the provider authenticates from environment variables
 - **AND** no provider credential appears in tracked files or generated variables
 
-### Requirement: Per-node tagged auth keys are minted by the stack
+### Requirement: Tagged auth keys are minted for the server nodes only
 
-The stack SHALL create a pre-authorized, reusable auth key for each node (`azure`, `raspi`, `mac`) and expose each as a sensitive output. Keys SHALL carry tags that distinguish exit-capable servers from clients.
+The stack SHALL create a pre-authorized, reusable auth key for each NixOS server node (`azure`, `raspi`) and expose each as a sensitive output. Keys SHALL carry tags that distinguish exit-capable servers. The stack SHALL NOT mint keys for client devices, whose sing-box endpoints enroll through interactive login instead.
 
-#### Scenario: One tagged key per node
+#### Scenario: One tagged key per server node
 
 - **WHEN** the tailnet stack is applied
-- **THEN** one auth key exists per node
+- **THEN** one auth key exists per server node
 - **AND** each key carries the tag(s) appropriate to that node's role
 - **AND** each key value is marked sensitive
+
+#### Scenario: No key is minted for clients
+
+- **WHEN** the tailnet stack is applied
+- **THEN** no auth key resource exists for the Mac, iOS, or Linux desktop
+- **AND** no client credential is bridged into any secrets file
 
 ### Requirement: The ACL is the single owner of exit-node approval
 

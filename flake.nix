@@ -162,9 +162,10 @@
               trap 'rm -f "$keys"' EXIT
               ${pkgs.opentofu}/bin/tofu -chdir="$root/tofu/tailnet" output -json > "$keys"
               # Each minted key is written to the secrets file scoped to its
-              # consumer: raspi reads its own node key, azure consumes the rest
-              # (its own node key plus the mobile/desktop profile keys).
-              for node in azure raspi mac ios linux_desktop; do
+              # consumer: only the two server nodes get keys at all, and each
+              # reads its own. Client devices enroll through their sing-box
+              # tailscale endpoint's interactive login and receive no key.
+              for node in azure raspi; do
                 case "$node" in
                   raspi) target="$root/secrets/raspi.yaml" ;;
                   *) target="$root/secrets/azure.yaml" ;;

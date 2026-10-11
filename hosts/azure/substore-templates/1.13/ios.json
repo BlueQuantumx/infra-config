@@ -14,7 +14,6 @@
     {
       "type": "tailscale",
       "tag": "ts-ep",
-      "auth_key": "__TAILSCALE_AUTHKEY_IOS__",
       "hostname": "iphone"
     }
   ],
