@@ -67,6 +67,7 @@
     Feishu = 1551632588;
     ImmersiveTranslate = 6447957425;
     Amphetamine = 937984704;
+    TestFlight = 899247664;
   };
 
   nix.settings.trusted-users = [
