@@ -24,6 +24,7 @@
     pdfpc
   ];
   homebrew.brews = [
+    "bitwarden-cli"
     "mas"
     "hermes-agent"
     # omp — the `can1357/oh-my-pi` coding agent. Fully-qualified name makes
@@ -53,6 +54,7 @@
     "rectangle"
     "sfm"
     "stats"
+    "telegram"
     "visual-studio-code"
     "xcodes-app"
     "zed"
