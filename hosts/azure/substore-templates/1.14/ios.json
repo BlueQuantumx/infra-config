@@ -49,7 +49,19 @@
       "mtu": 9000,
       "auto_route": true,
       "strict_route": true,
-      "stack": "mixed"
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 60125
+        }
+      }
+    },
+    {
+      "type": "http",
+      "tag": "http-in",
+      "listen": "127.0.0.1",
+      "listen_port": 60125
     }
   ],
   "outbounds": [
