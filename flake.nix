@@ -220,6 +220,13 @@
               azure-cli
               opentofu
             ];
+            # mkShell 会把环境变量写成 export FOO='...'，单引号下 ~ 不会展开，
+            # 而 sops 自己也不展开 ~，所以必须在 shellHook 里用 $HOME 展开成绝对路径。
+            shellHook = ''
+              if [ -f "$HOME/.ssh/sops" ]; then
+                export SOPS_AGE_SSH_PRIVATE_KEY_FILE="$HOME/.ssh/sops"
+              fi
+            '';
           };
         }
       );
