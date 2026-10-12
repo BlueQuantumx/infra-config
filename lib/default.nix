@@ -104,6 +104,7 @@ rec {
     ghostty = ../home-manager/modules/ghostty.nix;
     git = ../home-manager/modules/git.nix;
     github-token = ../home-manager/modules/github-token.nix;
+    hermes-agent = ../home-manager/modules/hermes-agent.nix;
     xcode = ../home-manager/modules/xcode.nix;
     zsh = ../home-manager/modules/zsh.nix;
   };

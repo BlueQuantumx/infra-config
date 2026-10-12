@@ -23,6 +23,7 @@ in
     ./modules/ghostty.nix
     ./modules/xcode.nix
     ./modules/zsh.nix
+    ./modules/hermes-agent.nix
     ./modules/github-token.nix
   ];
 
@@ -71,6 +72,9 @@ in
       "Custom.idekeybindings" = ./keymaps/xcode/Custom.idekeybindings;
     };
   };
+
+  # Hermes Agent lives in ~/.local/bin (see hosts/macbook/configuration.nix).
+  programs.hermes-agent.enable = true;
 
   programs.ssh = {
     enable = true;

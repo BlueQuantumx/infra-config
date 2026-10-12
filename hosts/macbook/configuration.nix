@@ -25,8 +25,9 @@
   ];
   homebrew.brews = [
     "bitwarden-cli"
+    # duplicate of `hermes-desktop` cask, which includes the `hermes-agent` binary.
+    # "hermes-agent"
     "mas"
-    "hermes-agent"
     # omp — the `can1357/oh-my-pi` coding agent. Fully-qualified name makes
     # Homebrew Bundle tap `can1357/tap` and trust it on activation.
     "can1357/tap/omp"
@@ -39,6 +40,7 @@
     "betterdisplay"
     "bilibili"
     "block-goose"
+    "hermes-desktop"
     "iina"
     "intellij-idea"
     "jetbrains-gateway"
