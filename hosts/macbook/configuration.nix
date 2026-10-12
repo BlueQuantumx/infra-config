@@ -40,6 +40,7 @@
     "betterdisplay"
     "bilibili"
     "block-goose"
+    "deepseek-harness"
     "hermes-desktop"
     "iina"
     "intellij-idea"
