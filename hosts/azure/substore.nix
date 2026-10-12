@@ -114,19 +114,6 @@ in
     payloadPath = "/run/secrets";
 
     subscriptions = {
-      hutao_cloud = {
-        displayName = "Hutao Cloud";
-        source = "remote";
-        url = config.sops.placeholder."subs/hutao_cloud_url";
-        ua = "GUI.for.Singbox/v1.23.2";
-        process = quickSettings;
-        extraOptions = {
-          tag = [ "Backup" ];
-          passThroughUA = false;
-          ignoreFailedRemoteSub = "enabled";
-        };
-      };
-
       liangxinyun = {
         displayName = "良心云";
         source = "remote";
