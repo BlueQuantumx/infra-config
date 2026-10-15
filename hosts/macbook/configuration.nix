@@ -13,15 +13,16 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
+    bun
+    corepack
+    gh
+    helix
+    just
+    pdfpc
+    rustup
+    swift-format
     tinymist
     uv
-    just
-    helix
-    swift-format
-    bun
-    gh
-    corepack
-    pdfpc
   ];
   homebrew.brews = [
     "bitwarden-cli"
@@ -88,6 +89,7 @@
     finder = {
       FXPreferredViewStyle = "Nlsv";
       AppleShowAllExtensions = true;
+      ShowPathbar = true;
       ShowStatusBar = true;
     };
     trackpad = {
@@ -111,6 +113,7 @@
     NSGlobalDomain.AppleShowAllExtensions = true;
     NSGlobalDomain.InitialKeyRepeat = 25;
     NSGlobalDomain.KeyRepeat = 2;
+    NSGlobalDomain.NSStatusItemSpacing = 10;
   };
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
