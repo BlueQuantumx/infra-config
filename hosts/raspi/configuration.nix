@@ -202,5 +202,13 @@
 
   services.shairport-sync = {
     enable = true;
+    package = pkgs.shairport-sync-airplay2;
+    settings = {
+      general = {
+        name = "raspi shairport";
+        output_backend = "pipewire";
+      };
+    };
   };
+  services.pipewire.enable = true;
 }
