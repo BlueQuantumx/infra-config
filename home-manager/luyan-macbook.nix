@@ -17,6 +17,9 @@ in
     # Shared baseline (direnv, git, home-manager.enable)
     ./modules/base.nix
 
+    # OmniWM's module is not available in the stable Home Manager release.
+    (inputs.home-manager-unstable + "/modules/programs/omniwm.nix")
+
     # macOS-only modules
     ./modules/rectangle.nix
     ./modules/karabiner.nix
@@ -64,6 +67,12 @@ in
     settings = {
       "lsp" = true;
     };
+  };
+
+  programs.omniwm = {
+    enable = true;
+    # settings = ./omniwm/settings.toml;
+    launchd.keepAlive = false;
   };
 
   programs.xcode = {

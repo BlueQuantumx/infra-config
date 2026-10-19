@@ -13,6 +13,9 @@
     # unstable-packages overlay below, which must be applied as well).
     # Only needed when the optional EasyTier fallback mesh is enabled.
     easytier = final.unstable.easytier;
+
+    # OmniWM is only packaged in nixpkgs-unstable.
+    omniwm = final.unstable.omniwm;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
