@@ -16,7 +16,8 @@ OUTPUT="${SINGBOX_CONFIG_FILE:?SINGBOX_CONFIG_FILE is required}"
 
 mkdir -p "$(dirname "$OUTPUT")"
 
-URL="$(cat "$SECRET_FILE")"
+unset subscription_url
+subscription_url="$(cat "$SECRET_FILE")"
 
 TMP="$(mktemp)"
 trap 'rm -f "$TMP"' EXIT
@@ -30,7 +31,19 @@ write_empty_config() {
 }
 
 # 增加连接超时(10s)、最大执行时间(30s)以及失败重试(最高3次，间隔2秒)
-if ! curl -fsSL --connect-timeout 10 --max-time 30 --retry 3 --retry-delay 2 "$URL" -o "$TMP"; then
+# Keep the subscription URL out of curl's argv. It is supplied through a pipe
+# exposed as a temporary file descriptor; escape curl-config metacharacters
+# before writing the config line. The URL itself is never passed to an external
+# command as an argument.
+if [[ "$subscription_url" == *$'\n'* || "$subscription_url" == *$'\r'* ]]; then
+    echo "Download failed: invalid subscription URL"
+    write_empty_config
+    exit 0
+fi
+curl_config_url=${subscription_url//\\/\\\\}
+curl_config_url=${curl_config_url//\"/\\\"}
+if ! curl -fsSL --connect-timeout 10 --max-time 30 --retry 3 --retry-delay 2 \
+    --config <(printf 'url = "%s"\n' "$curl_config_url") -o "$TMP" 2>/dev/null; then
     echo "Download failed"
     write_empty_config
     exit 0

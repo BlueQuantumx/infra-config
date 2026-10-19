@@ -20,10 +20,11 @@ let
 
   report = pkgs.writeShellScript "pascal-ddns-report" ''
     set -eu
+    unset token
     token="$(< ${cfg.secretFile})"
     [ -n "$token" ]
     ${pkgs.iproute2}/bin/ip a | ${pkgs.curl}/bin/curl -fsS -X POST ${server}/api/v1/report \
-      -H "Authorization: Bearer $token" \
+      -H @<(printf '%s\n' "Authorization: Bearer $token") \
       -H 'Content-Type: text/plain; charset=utf-8' \
       --data-binary @- >/dev/null
   '';

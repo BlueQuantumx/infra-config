@@ -157,10 +157,6 @@
             pkgs.writeShellScript "tofu-tailnet-secrets" ''
               set -euo pipefail
               root="$(git rev-parse --show-toplevel)"
-              keys="$(mktemp)"
-              chmod 600 "$keys"
-              trap 'rm -f "$keys"' EXIT
-              ${pkgs.opentofu}/bin/tofu -chdir="$root/tofu/tailnet" output -json > "$keys"
               # Each minted key is written to the secrets file scoped to its
               # consumer: only the two server nodes get keys at all, and each
               # reads its own. Client devices enroll through their sing-box
@@ -170,9 +166,10 @@
                   raspi) target="$root/secrets/raspi.yaml" ;;
                   *) target="$root/secrets/azure.yaml" ;;
                 esac
-                value="$(${pkgs.jq}/bin/jq -r --arg n "authkey_$node" '.[$n].value' "$keys")"
-                json="$(${pkgs.jq}/bin/jq -Rn --arg v "$value" '$v')"
-                ${pkgs.sops}/bin/sops set "$target" "[\"tailscale\"][\"authkey_$node\"]" "$json"
+                # Stream the sensitive output directly to sops: neither the
+                # auth key nor a JSON-encoded copy appears in argv or a temp file.
+                ${pkgs.opentofu}/bin/tofu -chdir="$root/tofu/tailnet" output -raw "authkey_$node" \
+                  | ${pkgs.sops}/bin/sops set --value-stdin "$target" "[\"tailscale\"][\"authkey_$node\"]"
               done
               echo "wrote tailscale auth keys into host-scoped secrets files"
             ''

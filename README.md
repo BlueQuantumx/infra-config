@@ -74,6 +74,9 @@ first one.
 5. **Move a value with pipes only, never on a command line.** `sops` provides
    `--value-stdin` / `--value-file` so the value stays out of `ps` output:
 
+   More generally, never pass a secret as an external command's argument,
+   including a bearer token in an HTTP header or a credential-bearing URL.
+
    ```sh
    sops decrypt --extract '["some"]["key"]' from.yaml \
      | jq -Rs 'sub("\n$"; "")' \
