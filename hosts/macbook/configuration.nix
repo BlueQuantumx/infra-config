@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }:
 {
@@ -12,16 +13,26 @@
   ];
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
+    builtins.elem (lib.getName pkg) [
+      "bws"
+    ];
   environment.systemPackages = with pkgs; [
     bun
+    bws
     corepack
     gh
     helix
     just
+    just-formatter
+    just-lsp
     pdfpc
     rustup
+    sops
     swift-format
     tinymist
+    typst
     uv
   ];
   homebrew.brews = [
@@ -113,7 +124,7 @@
     NSGlobalDomain.AppleShowAllExtensions = true;
     NSGlobalDomain.InitialKeyRepeat = 25;
     NSGlobalDomain.KeyRepeat = 2;
-    NSGlobalDomain.NSStatusItemSpacing = 10;
+    NSGlobalDomain.NSStatusItemSpacing = 12;
   };
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
