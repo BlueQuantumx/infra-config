@@ -120,23 +120,27 @@ in
         url = config.sops.placeholder."subs/liangxinyun_url";
         process = quickSettings;
         extraOptions = {
-          tag = [ "Main" "Backup" ];
+          tag = [
+            "Backup"
+          ];
           passThroughUA = false;
           ignoreFailedRemoteSub = "enabled";
         };
       };
 
-      # holytech = {
-      #   displayName = "holytech";
-      #   source = "remote";
-      #   url = config.sops.placeholder."subs/holytech_url";
-      #   process = quickSettings;
-      #   extraOptions = {
-      #     tag = [ "Main" ];
-      #     passThroughUA = false;
-      #     ignoreFailedRemoteSub = "enabled";
-      #   };
-      # };
+      holytech = {
+        displayName = "holytech";
+        source = "remote";
+        url = config.sops.placeholder."subs/holytech_url";
+        process = quickSettings;
+        extraOptions = {
+          tag = [
+            "Main"
+          ];
+          passThroughUA = false;
+          ignoreFailedRemoteSub = "enabled";
+        };
+      };
     };
 
     files = {
