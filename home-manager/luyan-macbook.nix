@@ -95,6 +95,9 @@ in
     settings."*" = {
       AddKeysToAgent = "yes";
       UseKeychain = "yes";
+      SetEnv = {
+        TERM = "xterm-256color";
+      };
     };
 
     settings."github.com" = {
