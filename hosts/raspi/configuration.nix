@@ -66,12 +66,16 @@
   };
 
   # Tailscale: server node that advertises an exit node but does not consume
-  # one. The sops-supplied auth key carries tag:server and tag:exit.
+  # one, and disables MagicDNS so it does not overwrite local DNS resolution.
+  # The sops-supplied auth key carries tag:server and tag:exit.
   services.tailscale = {
     enable = true;
     authKeyFile = config.sops.secrets."tailscale/authkey_raspi".path;
     useRoutingFeatures = "server";
-    extraUpFlags = [ "--advertise-exit-node" ];
+    extraUpFlags = [
+      "--advertise-exit-node"
+      "--accept-dns=false"
+    ];
   };
 
   # Tie-break for the forwarding sysctl shared with Tailscale when the optional
