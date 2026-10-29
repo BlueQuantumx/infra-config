@@ -151,6 +151,7 @@ in
       linux_desktop_1_14 = mkSingboxFile "1.14" "linux-desktop" "Linux Desktop (sing-box 1.14)" "config";
       mac_1_13 = mkSingboxFile "1.13" "mac" "Mac (sing-box 1.13)" "config";
       mac_1_14 = mkSingboxFile "1.14" "mac" "Mac (sing-box 1.14)" "config";
+      windows_1_14 = mkSingboxFile "1.14" "windows" "Windows (sing-box 1.14)" "config";
       ios_1_13 = mkSingboxFile "1.13" "ios" "iOS (sing-box 1.13)" "config";
       ios_1_14 = mkSingboxFile "1.14" "ios" "iOS (sing-box 1.14)" "config";
     };
