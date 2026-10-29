@@ -28,7 +28,7 @@ let
       content = lib.replaceString "__SUBSTORE_API_SECRET__" config.sops.placeholder."subs/api_secret" (
         builtins.readFile (templates + "/${version}/${name}.json")
       );
-      process = scriptOperator (builtins.readFile "${templates}/scripts/inject-proxies.js");
+      process = scriptOperator (builtins.readFile (templates + "/${version}/inject-proxies.js"));
     } (lib.optionalAttrs (mode != null) { inherit mode; });
   scriptOperator = scriptContent: [
     {

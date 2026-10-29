@@ -15,6 +15,10 @@ let backupProxies = await produceArtifact({
   produceType: "internal",
 });
 
+// 过滤掉含有 tls.certificate_sha256 字段的节点
+mainProxies = mainProxies.filter((p) => !p.tls?.certificate_sha256);
+backupProxies = backupProxies.filter((p) => !p.tls?.certificate_sha256);
+
 config.outbounds.push(...mainProxies);
 config.outbounds.push(...backupProxies);
 // 按 tag 字段去重，保留最后一个
