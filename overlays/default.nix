@@ -16,6 +16,8 @@
 
     # OmniWM is only packaged in nixpkgs-unstable.
     omniwm = final.unstable.omniwm;
+
+    typst = final.unstable.typst;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

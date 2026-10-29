@@ -8,6 +8,7 @@
   imports = [
     inputs.self.darwinModules.base
     inputs.self.nixosModules.prelude
+    inputs.self.nixosModules.overlays
     inputs.self.darwinModules.homebrew
     inputs.self.darwinModules.bitwarden
   ];
