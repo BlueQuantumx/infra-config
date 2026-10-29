@@ -84,6 +84,8 @@
     ImmersiveTranslate = 6447957425;
     Amphetamine = 937984704;
     TestFlight = 899247664;
+    WPS = 1443749478;
+    TecentMeeting = 1484048379;
   };
 
   nix.settings.trusted-users = [
