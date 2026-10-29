@@ -72,6 +72,7 @@ in
     "sub-store.env" = {
       path = "/run/secrets/sub-store.env";
       content = ''
+        SUB_STORE_CORS_ALLOWED_ORIGINS=https://${defaults.subdomains.substore}.${defaults.domain}
         SUB_STORE_FRONTEND_BACKEND_PATH=${backendPath}
         SUB_STORE_PUSH_SERVICE=${config.sops.placeholder.push_service_base_url}/[推送标题]/[推送内容]?group=SubStore&isArchive=1&level=timeSensitive
       '';
