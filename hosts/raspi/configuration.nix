@@ -214,5 +214,10 @@
       };
     };
   };
+  # shairport's audio backend
   services.pipewire.enable = true;
+  # shairport with airplay2 requires nqptp
+  systemd.services.shairport-sync.path = [
+    pkgs.nqptp
+  ];
 }
